@@ -5,6 +5,7 @@ import { Waves } from 'lucide-react'
 import { useOceanStore } from '@/store/useOceanStore'
 import ModeToggle from '@/components/ModeToggle'
 import ManualInputForm from '@/components/ManualInputForm'
+import ProfileVisualizer from '@/components/ProfileVisualizer'
 
 const InteractiveMap = dynamic(() => import('@/components/InteractiveMap'), {
   ssr: false,
@@ -34,7 +35,12 @@ export default function Home() {
         <ModeToggle />
       </div>
 
-      <div className="mx-auto max-w-6xl">{mode === 'manual' ? <ManualInputForm /> : <InteractiveMap />}</div>
+      <div className="mx-auto max-w-6xl">
+        {mode === 'manual' ? <ManualInputForm /> : <InteractiveMap />}
+        
+        {/* Render the prediction output right below the input forms */}
+        <ProfileVisualizer />
+      </div>
     </main>
   )
 }
