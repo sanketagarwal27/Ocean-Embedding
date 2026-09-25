@@ -82,9 +82,21 @@ async def predict_profile(lat: float, lon: float, date: str = "2015-06-15"):
     if not npz_path.exists():
         raise HTTPException(status_code=404, detail=f"No input satellite data found for date {date}")
         
+    # Extract specific point indices
+    lat_idx = find_nearest_idx(LATS, lat)
+    lon_idx = find_nearest_idx(LONS, lon)
+    
     # Load daily satellite inputs
     data = np.load(npz_path)
     inp = data["input"].astype(np.float32)
+    
+    # Check if the requested coordinate is over land
+    if np.isnan(inp[lat_idx, lon_idx, 0]):
+        raise HTTPException(
+            status_code=400, 
+            detail=f"The requested coordinate (Lat: {LATS[lat_idx]:.2f}, Lon: {LONS[lon_idx]:.2f}) is over land. No ocean data exists here."
+        )
+        
     x = torch.tensor(inp).permute(2, 0, 1).to(DEVICE)
     
     # Normalize inputs
@@ -97,9 +109,6 @@ async def predict_profile(lat: float, lon: float, date: str = "2015-06-15"):
         preds = MODEL(x, DEPTH_LEVELS) # [1, 15, H, W]
         preds = preds.squeeze(0).cpu().numpy() # [15, H, W]
         
-    # Extract specific point
-    lat_idx = find_nearest_idx(LATS, lat)
-    lon_idx = find_nearest_idx(LONS, lon)
     pred_profile = preds[:, lat_idx, lon_idx]
     
     # Build clean JSON response (No GLORYS values)

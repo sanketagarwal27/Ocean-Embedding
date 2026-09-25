@@ -9,7 +9,7 @@ import subprocess
 def main():
     parser = argparse.ArgumentParser(description="Phase 1: Baseline Model Pipeline")
     parser.add_argument("--epochs", type=int, default=50)
-    parser.add_argument("--batch-size", type=int, default=4)
+    parser.add_argument("--batch-size", type=int, default=2)
     parser.add_argument("--lr", type=float, default=1e-4)
     parser.add_argument("--eval", action="store_true", help="Only run evaluation against ARGO")
     args = parser.parse_args()
