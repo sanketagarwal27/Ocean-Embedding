@@ -1,0 +1,55 @@
+# Python byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments
+venv/
+.venv/
+env/
+ENV/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Datasets & Data Directories (All raw, processed, masks, and temporary datasets)
+data/
+*.nc
+*.nc4
+*.grb
+*.grib
+*.hdf
+*.h5
+*.he5
+*.zarr/
+*.npz
+*.npy
+
+# Output plots, checkpoints, logs
+outputs/
+runs/
+tb_logs/
+*.pth
+*.pt
+*.ckpt
+*.onnx
+
+# IDE, OS & Scratch files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+scratch/
+
+# Environment / Secret configs
+.env
+.env.*
+!.env.example
