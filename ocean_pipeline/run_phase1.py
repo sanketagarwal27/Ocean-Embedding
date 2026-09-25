@@ -27,7 +27,7 @@ def main():
         
     print("\n--- Starting Evaluation against ARGO ---")
     eval_script = Path(__file__).parent / "evaluation" / "eval_phase1.py"
-    subprocess.run(["python", str(eval_script)])
+    subprocess.run([sys.executable, str(eval_script)])
     
     print("\n" + "="*64)
     print("  Phase 1 Complete")

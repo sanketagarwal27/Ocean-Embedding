@@ -38,7 +38,7 @@ tb_logs/
 *.pt
 *.ckpt
 *.onnx
-
+logs
 # IDE, OS & Scratch files
 .vscode/
 .idea/
