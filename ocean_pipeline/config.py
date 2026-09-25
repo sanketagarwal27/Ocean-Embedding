@@ -56,9 +56,9 @@ NORM_METHOD = "zscore"   # alternative: "minmax"
 
 # ── Time splits ───────────────────────────────────────────────────────────────
 # Adjust after confirming actual data availability
-TRAIN_YEARS = list(range(2015, 2022))   # 2015–2021
-VAL_YEARS   = [2022]
-TEST_YEARS  = [2023]
+TRAIN_YEARS = [2015]
+VAL_YEARS   = [2015]
+TEST_YEARS  = [2015]
 
 # ── Training hparams (placeholder — overridden per phase) ─────────────────────
 SEED = 42

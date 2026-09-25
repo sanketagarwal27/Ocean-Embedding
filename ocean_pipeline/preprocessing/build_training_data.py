@@ -92,7 +92,7 @@ def _interp_to_standard_depths(data_3d, src_depths):
             try:
                 f = interp1d(
                     src_depths[valid], col[valid],
-                    kind="linear", bounds_error=False, fill_value=np.nan
+                    kind="linear", bounds_error=False, fill_value=(col[valid][0], col[valid][-1])
                 )
                 result[:, i, j] = f(DEPTH_LEVELS_ARR).astype(np.float32)
             except Exception:

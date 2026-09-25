@@ -11,14 +11,14 @@ def main():
     parser.add_argument("--epochs", type=int, default=50)
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--lr", type=float, default=1e-4)
-    parser.add_argument("--eval-only", action="store_true", help="Only run evaluation against ARGO")
+    parser.add_argument("--eval", action="store_true", help="Only run evaluation against ARGO")
     args = parser.parse_args()
 
     print("="*64)
     print("  Phase 1: Baseline CNN Encoder + MLP Decoder")
     print("="*64)
 
-    if not args.eval-only:
+    if not args.eval:
         print("\n--- Starting Training ---")
         # Call training
         # Pass args to train_main using sys.argv override or by importing

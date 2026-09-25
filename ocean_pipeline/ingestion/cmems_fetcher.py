@@ -43,7 +43,7 @@ CMEMS_DATASETS = {
         "description": "OSTIA SST L4 reprocessed (0.05deg daily)",
     },
     "ssh": {
-        "dataset_id": "cmems_obs-sl_glo_phy-ssh_my_allsat-l4-duacs-0.25deg_P1D",
+        "dataset_id": "c3s_obs-sl_glo_phy-ssh_my_twosat-l4-duacs-0.25deg_P1D",
         "variables": ["adt", "sla", "ugos", "vgos"],
         "description": "DUACS SSH L4 multi-year (0.25deg daily)",
     },
@@ -120,6 +120,7 @@ class CMECSFetcher:
         -------
         Path to the downloaded file.
         """
+        import os
         import copernicusmarine
 
         cfg = CMEMS_DATASETS[dataset_key]
@@ -146,8 +147,15 @@ class CMECSFetcher:
             end_datetime=f"{end_date}T23:59:59",
             output_directory=str(out_dir),
             output_filename=output_filename,
-            force_download=True,
+            overwrite=force,
         )
+
+        # Inject credentials if available to avoid interactive prompts
+        cmems_user = os.environ.get("COPERNICUSMARINE_SERVICE_USERNAME")
+        cmems_pass = os.environ.get("COPERNICUSMARINE_SERVICE_PASSWORD")
+        if cmems_user and cmems_pass:
+            kwargs["username"] = cmems_user
+            kwargs["password"] = cmems_pass
 
         if min_depth is not None:
             kwargs["minimum_depth"] = min_depth

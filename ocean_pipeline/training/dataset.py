@@ -61,8 +61,8 @@ class OceanDataset(Dataset):
         y = torch.tensor(target).permute(2, 0, 1)
         date_str = str(data["date"][0])
         
-        # Ocean mask: true where target has valid data at the surface
-        mask = ~torch.isnan(y[0])
+        # Ocean mask: true where target has valid data at ANY depth
+        mask = (~torch.isnan(y)).any(dim=0)
         
         if self.temporal_window == 1:
             # Single day input: [H, W, C=7] -> convert to [C, H, W]
