@@ -14,6 +14,11 @@ export const useOceanStore = create((set, get) => ({
   longitude: '',
   files: { ...EMPTY_FILES },
   lastSubmission: null,
+  
+  // Backend Integration State
+  predictionData: null,
+  isPredicting: false,
+  predictionError: null,
 
   setMode: (mode) => set({ mode }),
 
@@ -57,7 +62,7 @@ export const useOceanStore = create((set, get) => ({
     return hasValidRequestDetails && allFilesPresent
   },
 
-  submitPayload: () => {
+  submitPayload: async () => {
     const { mode, date, latitude, longitude, files } = get()
 
     const payload = {
@@ -75,7 +80,30 @@ export const useOceanStore = create((set, get) => ({
     }
 
     console.log('STAG-INR submission payload:', payload)
-    set({ lastSubmission: payload })
-    return payload
+    set({ 
+      lastSubmission: payload, 
+      isPredicting: true, 
+      predictionError: null, 
+      predictionData: null 
+    })
+    
+    // Call the actual FastAPI Backend
+    try {
+      const response = await fetch(`http://localhost:8000/api/predict_profile?lat=${latitude}&lon=${longitude}&date=${date}`)
+      
+      if (!response.ok) {
+        const errData = await response.json()
+        throw new Error(errData.detail || errData.error || 'Failed to fetch prediction from API')
+      }
+      
+      const data = await response.json()
+      console.log('Backend Prediction Received:', data)
+      set({ predictionData: data, isPredicting: false })
+      return data
+    } catch (error) {
+      console.error('FastAPI Integration Error:', error)
+      set({ predictionError: error.message, isPredicting: false })
+      return null
+    }
   }
 }))
