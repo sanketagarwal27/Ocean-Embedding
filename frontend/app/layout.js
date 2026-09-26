@@ -1,7 +1,7 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'STAG-INR · Subsurface Temperature Grid',
+  title: 'OceanLens · Subsurface Temperature Prediction',
   description: 'Predict 3D subsurface ocean temperatures across the North Indian Ocean'
 }
 

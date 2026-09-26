@@ -27,8 +27,8 @@ export default function Home() {
             <Waves className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="font-display text-xl font-semibold text-slate-100">STAG&#8209;INR</h1>
-            <p className="text-xs text-slate-500">Subsurface Temperature Grid &middot; North Indian Ocean</p>
+            <h1 className="font-display text-xl font-semibold text-slate-100">OceanLens</h1>
+            <p className="text-xs text-slate-500">AI-Powered Ocean Profiler &middot; North Indian Ocean</p>
           </div>
         </div>
 

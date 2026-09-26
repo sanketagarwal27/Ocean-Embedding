@@ -3,6 +3,7 @@
 import React from 'react'
 import { useOceanStore } from '@/store/useOceanStore'
 import { Thermometer, Activity, MapPin, Calendar } from 'lucide-react'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 const PARAMETER_NAMES = {
   'sst': 'Sea Surface Temperature',
@@ -195,6 +196,56 @@ export default function ProfileVisualizer() {
           
         </div>
 
+      </div>
+
+      {/* Chart Section */}
+      <div className="border-t border-slate-800 bg-slate-900/40 p-4 sm:p-6 sm:px-8">
+        <h3 className="text-sm font-semibold tracking-wider text-slate-400 uppercase mb-6 border-b border-slate-800 pb-2">
+          Depth vs Temperature Curve
+        </h3>
+        <div className="h-[280px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={profile} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
+              <defs>
+                <linearGradient id="colorTemp" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#00bfa5" stopOpacity={0.4}/>
+                  <stop offset="95%" stopColor="#00bfa5" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+              <XAxis 
+                dataKey="depth_m" 
+                stroke="#64748b" 
+                tick={{fill: '#64748b', fontSize: 11}} 
+                tickMargin={10}
+                label={{ value: 'Depth (m)', position: 'insideBottom', offset: -15, fill: '#94a3b8', fontSize: 13, fontWeight: 500 }} 
+              />
+              <YAxis 
+                stroke="#64748b" 
+                tick={{fill: '#64748b', fontSize: 11}}
+                domain={['dataMin - 1', 'dataMax + 1']}
+                tickFormatter={(val) => val.toFixed(1)}
+                label={{ value: 'Temperature (°C)', angle: -90, position: 'insideLeft', offset: 15, fill: '#94a3b8', fontSize: 13, fontWeight: 500 }}
+              />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', borderRadius: '8px', color: '#f8fafc', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)' }}
+                itemStyle={{ color: '#00bfa5', fontWeight: 600 }}
+                labelStyle={{ color: '#94a3b8', marginBottom: '4px' }}
+                labelFormatter={(label) => `Depth: ${label}m`}
+                formatter={(value) => [`${Number(value).toFixed(2)} °C`, 'Temperature']}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="temperature_c" 
+                stroke="#00bfa5" 
+                strokeWidth={3} 
+                fillOpacity={1} 
+                fill="url(#colorTemp)" 
+                activeDot={{ r: 6, fill: '#00bfa5', stroke: '#0f172a', strokeWidth: 3 }} 
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   )
