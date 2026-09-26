@@ -4,6 +4,16 @@ import React from 'react'
 import { useOceanStore } from '@/store/useOceanStore'
 import { Thermometer, Activity, MapPin, Calendar } from 'lucide-react'
 
+const PARAMETER_NAMES = {
+  'sst': 'Sea Surface Temperature',
+  'sss': 'Sea Surface Salinity',
+  'ssh': 'Sea Surface Height',
+  'u_current': 'Zonal Current (U)',
+  'v_current': 'Meridional Current (V)',
+  'u_wind': 'Zonal Wind (U)',
+  'v_wind': 'Meridional Wind (V)'
+}
+
 // Helper to interpolate between two hex colors
 function lerpColor(c1, c2, factor) {
   const hex2rgb = (hex) => {
@@ -98,18 +108,47 @@ export default function ProfileVisualizer() {
       </div>
 
       {/* Main Content: 3-Column Layout */}
-      <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 items-start">
         
-        {/* Left: Reserved space for Input Parameters (Span 4) */}
-        <div className="hidden lg:flex flex-col items-center justify-center h-[400px] rounded-xl border border-dashed border-slate-700/50 bg-slate-900/20 p-6 lg:col-span-4">
-          <p className="text-slate-500 text-sm text-center font-medium">
-            Space reserved for Input Parameters
-          </p>
+        {/* Left: Input Parameters (Span 4) */}
+        <div className="hidden lg:flex flex-col h-[400px] rounded-xl border border-slate-700/50 bg-slate-900/40 shadow-inner overflow-hidden lg:col-span-4">
+          <div className="bg-slate-800/80 px-4 py-2.5 border-b border-slate-700/50">
+            <h3 className="text-sm font-semibold tracking-wider text-slate-300 uppercase text-center">
+              Satellite Inputs
+            </h3>
+          </div>
+          
+          <div className="p-5 flex-1 flex flex-col overflow-hidden">
+            {predictionData.inputs ? (
+            <div className="grid grid-cols-1 gap-2 overflow-y-auto custom-scrollbar pr-2">
+              {Object.entries(predictionData.inputs).map(([key, value]) => (
+                <div key={key} className="flex items-center justify-between bg-slate-950/50 rounded-lg p-2.5 border border-slate-800/80">
+                  <span className="text-slate-400 text-[11px] uppercase tracking-wide">
+                    {PARAMETER_NAMES[key] || key.replace('_', ' ')}
+                  </span>
+                  <span className="text-slate-200 font-semibold text-xs">
+                    {value !== null ? value.toFixed(3) : '--'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex-1 flex items-center justify-center">
+              <p className="text-slate-600 text-xs text-center italic">No input data available</p>
+            </div>
+          )}
+          </div>
         </div>
 
         {/* Middle: Tabular readouts, now narrower to reduce empty space (Span 5) */}
-        <div className="w-full bg-slate-950/30 rounded-xl p-1 shadow-inner border border-slate-800/60 overflow-hidden lg:col-span-5">
-          <div className="grid grid-cols-2 gap-px bg-slate-800/60 font-medium text-xs text-slate-400 uppercase tracking-wider">
+        <div className="w-full flex flex-col h-[400px] bg-slate-950/30 rounded-xl shadow-inner border border-slate-800/60 overflow-hidden lg:col-span-5">
+          <div className="bg-slate-800/80 px-4 py-2.5 border-b border-slate-700/50">
+            <h3 className="text-sm font-semibold tracking-wider text-slate-300 uppercase text-center">
+              Prediction
+            </h3>
+          </div>
+          <div className="p-1 flex-1 flex flex-col overflow-hidden">
+            <div className="grid grid-cols-2 gap-px bg-slate-800/60 font-medium text-xs text-slate-400 uppercase tracking-wider">
             <div className="bg-slate-900 py-2 px-4">Depth (m)</div>
             <div className="bg-slate-900 py-2 px-4 text-right">Temp (°C)</div>
           </div>
@@ -132,6 +171,7 @@ export default function ProfileVisualizer() {
                 </div>
               </div>
             ))}
+            </div>
           </div>
         </div>
 

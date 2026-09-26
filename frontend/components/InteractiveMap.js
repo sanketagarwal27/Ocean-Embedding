@@ -10,7 +10,7 @@ import FloatingPanel from './FloatingPanel'
 const pinIcon = L.divIcon({
   className: 'pin-marker',
   html: `<svg width="32" height="40" viewBox="0 0 32 40" xmlns="http://www.w3.org/2000/svg">
-    <path d="M16 0C7.163 0 0 7.163 0 16c0 11 16 24 16 24s16-13 16-24c0-8.837-7.163-16-16-16z" fill="#2dd4bf"/>
+    <path d="M16 0C7.163 0 0 7.163 0 16c0 11 16 24 16 24s16-13 16-24c0-8.837-7.163-16-16-16z" fill="#fe4747ff"/>
     <circle cx="16" cy="16" r="6" fill="#022c22"/>
   </svg>`,
   iconSize: [32, 40],

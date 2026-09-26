@@ -10,7 +10,8 @@ from functools import lru_cache
 
 from ocean_pipeline.config import (
     DATA_PROCESSED, OUTPUTS_CKPT, DEPTH_LEVELS,
-    LATS, LONS, LAT_MIN, LAT_MAX, LON_MIN, LON_MAX
+    LATS, LONS, LAT_MIN, LAT_MAX, LON_MIN, LON_MAX,
+    INPUT_CHANNELS
 )
 from ocean_pipeline.models.baseline import BaselineCNN
 
@@ -135,9 +136,16 @@ async def predict_profile(lat: float, lon: float, date: str = "2015-06-15"):
         preds = preds.squeeze(0).cpu().numpy() # [15, H, W]
         
     pred_profile = preds[:, lat_idx, lon_idx]
+    raw_inputs = inp[lat_idx, lon_idx]
     
     # 5. RESPONSE CONSTRUCTION
     # Always return the frontend's requested parameters so the fallback is invisible
+    
+    inputs_dict = {}
+    for i, ch_name in enumerate(INPUT_CHANNELS):
+        val = raw_inputs[i]
+        inputs_dict[ch_name] = round(float(val), 3) if not np.isnan(val) else None
+
     response_data = {
         "metadata": {
             "requested_lat": orig_lat,
@@ -146,6 +154,7 @@ async def predict_profile(lat: float, lon: float, date: str = "2015-06-15"):
             "actual_grid_lon": float(orig_lon) if fallback_triggered else float(LONS[lon_idx]),
             "date": orig_date
         },
+        "inputs": inputs_dict,
         "profile": []
     }
     
